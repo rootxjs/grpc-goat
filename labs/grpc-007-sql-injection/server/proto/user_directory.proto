@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package userdirectory;
+
+option go_package = "grpc-goat/labs/grpc-007-sql-injection/server/proto";
+
+// UserDirectory provides employee profile management
+service UserDirectory {
+  // SearchUsers searches for users by username (vulnerable to SQL injection)
+  rpc SearchUsers(SearchUsersRequest) returns (SearchUsersResponse);
+}
+
+message SearchUsersRequest {
+  string username = 1;       // Username search (vulnerable parameter)
+}
+
+message SearchUsersResponse {
+  bool success = 1;
+  repeated UserInfo users = 2;
+  string flag = 3;           // Flag returned when SQL injection is successful
+}
+
+message UserInfo {
+  string username = 1;
+  string email = 2;
+  string role = 3;
+}

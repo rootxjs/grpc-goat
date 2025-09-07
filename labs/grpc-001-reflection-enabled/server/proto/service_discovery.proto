@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package servicediscovery;
+
+option go_package = "grpc-goat/labs/grpc-001-reflection-enabled/server/proto";
+
+// ServiceDiscovery provides an internal API registry for developers
+service ServiceDiscovery {
+  // ListServices returns public services only
+  rpc ListServices(ListServicesRequest) returns (ListServicesResponse);
+
+  // AdminListAllServices returns ALL services including hidden admin services
+  // This should be a protected endpoint but is exposed via reflection
+  rpc AdminListAllServices(AdminListAllServicesRequest) returns (AdminListAllServicesResponse);
+}
+
+message ListServicesRequest {
+  // Empty - no parameters needed
+}
+
+message ListServicesResponse {
+  repeated ServiceInfo services = 1;
+}
+
+message AdminListAllServicesRequest {
+  string admin_token = 1;
+}
+
+message AdminListAllServicesResponse {
+  repeated ServiceInfo public_services = 1;
+  repeated ServiceInfo admin_services = 2;
+  string flag = 3;  // CTF flag for completing this challenge
+}
+
+message ServiceInfo {
+  string name = 1;
+  string endpoint = 2;
+  string type = 3;
+}

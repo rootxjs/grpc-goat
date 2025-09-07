@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package imagepreview;
+
+option go_package = "grpc-goat/labs/grpc-009-ssrf/server/proto";
+
+// ImagePreview fetches and processes images from URLs
+service ImagePreview {
+  // FetchImage fetches an image from the provided URL
+  rpc FetchImage(FetchImageRequest) returns (FetchImageResponse);
+}
+
+message FetchImageRequest {
+  string url = 1;          // Image URL to fetch (vulnerable parameter)
+}
+
+message FetchImageResponse {
+  bool success = 1;
+  string content = 2;      // Image content or response data
+}

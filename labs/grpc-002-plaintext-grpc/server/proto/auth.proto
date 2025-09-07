@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "grpc-goat/labs/grpc-002-plaintext-grpc/server/proto";
+
+// AuthService handles user authentication
+service AuthService {
+  // Login authenticates a user and returns a session token
+  rpc Login(LoginRequest) returns (LoginResponse);
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+  string message = 2;
+  string session_token = 3;
+  string flag = 4;  // CTF flag for completing this challenge
+}

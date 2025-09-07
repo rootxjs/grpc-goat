@@ -1,0 +1,103 @@
+services:
+  # Lab 001: gRPC Reflection Enabled
+  grpc-001:
+    build:
+      context: ./labs/grpc-001-reflection-enabled
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    container_name: grpc-goat-001
+    networks:
+      - grpc-goat-network
+
+  # Lab 002: Plaintext gRPC
+  grpc-002:
+    build:
+      context: ./labs/grpc-002-plaintext-grpc
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    container_name: grpc-goat-002
+    networks:
+      - grpc-goat-network
+
+  # Lab 003: Insecure TLS
+  grpc-003:
+    build:
+      context: ./labs/grpc-003-insecure-tls
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    container_name: grpc-goat-003
+    networks:
+      - grpc-goat-network
+
+  # Lab 004: Arbitrary mTLS
+  grpc-004:
+    build:
+      context: ./labs/grpc-004-arbitary-mtls
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8004"
+    container_name: grpc-goat-004
+    networks:
+      - grpc-goat-network
+
+  # Lab 005: mTLS with Subject Validation
+  grpc-005:
+    build:
+      context: ./labs/grpc-005-arbitary-mtls-withsubject
+      dockerfile: Dockerfile
+    ports:
+      - "8005:8005"
+    container_name: grpc-goat-005
+    networks:
+      - grpc-goat-network
+
+  # Lab 006: Unix Socket World Writable
+  grpc-006:
+    build:
+      context: ./labs/grpc-006-pipe-world-read-write
+      dockerfile: Dockerfile
+    container_name: grpc-goat-006
+    volumes:
+      - /tmp/grpc-goat-006:/tmp
+    networks:
+      - grpc-goat-network
+
+  # Lab 007: SQL Injection
+  grpc-007:
+    build:
+      context: ./labs/grpc-007-sql-injection
+      dockerfile: Dockerfile
+    ports:
+      - "8007:8007"
+    container_name: grpc-goat-007
+    networks:
+      - grpc-goat-network
+
+  # Lab 008: Command Injection
+  grpc-008:
+    build:
+      context: ./labs/grpc-008-grpc-command-injection
+      dockerfile: Dockerfile
+    ports:
+      - "8008:8008"
+    container_name: grpc-goat-008
+    networks:
+      - grpc-goat-network
+
+  # Lab 009: SSRF
+  grpc-009:
+    build:
+      context: ./labs/grpc-009-ssrf
+      dockerfile: Dockerfile
+    ports:
+      - "8009:8009"
+    container_name: grpc-goat-009
+    networks:
+      - grpc-goat-network
+
+networks:
+  grpc-goat-network:
+    driver: bridge

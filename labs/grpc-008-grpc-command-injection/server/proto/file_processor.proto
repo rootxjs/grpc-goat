@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package fileprocessor;
+
+option go_package = "grpc-goat/labs/grpc-008-grpc-command-injection/server/proto";
+
+// FileProcessor provides file listing and management
+service FileProcessor {
+  // ListFiles lists files in the specified directory
+  rpc ListFiles(ListFilesRequest) returns (ListFilesResponse);
+}
+
+message ListFilesRequest {
+  string directory = 1;    // Directory to list (vulnerable parameter)
+}
+
+message ListFilesResponse {
+  bool success = 1;
+  string output = 2;
+  string flag = 3;         // CTF flag for completing this challenge
+}
