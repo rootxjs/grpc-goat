@@ -4,6 +4,8 @@ gRPC Goat is a "Vulnerable by Design" lab created to provide an interactive, han
 
 Each lab contains a **CTF-style flag** that you can capture by successfully exploiting the vulnerability!
 
+![alt text](grpc_goat_comp.webp)
+
 ## Quick Start
 
 ```bash
