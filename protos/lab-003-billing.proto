@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package billing;
+
+option go_package = "grpc-goat/labs/grpc-003-insecure-tls/server/proto";
+
+// BillingService processes customer payments
+service BillingService {
+  // ProcessPayment processes a customer payment
+  rpc ProcessPayment(PaymentRequest) returns (PaymentResponse);
+}
+
+message PaymentRequest {
+  string customer_id = 1;
+  string card_number = 2;
+  string expiry_date = 3;
+  string cvv = 4;
+  double amount = 5;
+  string currency = 6;
+}
+
+message PaymentResponse {
+  bool success = 1;
+  string message = 2;
+  string transaction_id = 3;
+  string flag = 4;  // CTF flag for completing this challenge
+}

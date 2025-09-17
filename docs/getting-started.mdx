@@ -40,6 +40,11 @@ Before you begin, ensure you have the following tools installed on your system:
    # https://github.com/fullstorydev/grpcurl/releases
    ```
 
+3. **Protocol Buffer Files** (for labs 002-009)
+   - All required `.proto` files are provided in the `protos/` directory
+   - Lab 001 uses gRPC reflection, so no proto file is needed
+   - See `protos/README.md` for usage instructions
+
 ### Additional gRPC Testing Tools
 
 **Command Line Tools:**
@@ -159,6 +164,26 @@ grpcurl -plaintext -d '{"admin_token": "fake"}' \
 ```
 
 **Congratulations!** You should see a response containing your first flag: `GRPC_GOAT{reflection_enabled_service_discovery}`
+
+## Testing Other Labs
+
+For labs 002-009, you'll need to use the corresponding proto files from the `protos/` directory:
+
+```bash
+# Example: Lab 002 - Auth Service
+grpcurl -plaintext -proto protos/lab-002-auth.proto \
+  -d '{"username": "admin", "password": "password"}' \
+  localhost:8002 auth.AuthService/Login
+
+# Example: Lab 007 - SQL Injection
+grpcurl -plaintext -proto protos/lab-007-user-directory.proto \
+  -d '{"username": "admin"}' \
+  localhost:8007 userdirectory.UserDirectory/SearchUsers
+```
+
+<Aside type="note">
+**Proto Files**: Each lab (except 001) requires its corresponding proto file for client interaction. All proto files are available in the `protos/` directory with detailed usage examples.
+</Aside>
 
 ## Next Steps
 

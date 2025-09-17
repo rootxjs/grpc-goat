@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package partner;
+
+option go_package = "grpc-goat/labs/grpc-004-arbitary-mtls/server/proto";
+
+// PartnerAPI exposes partner integrations
+service PartnerAPI {
+  // GetPartnerData returns sensitive partner information
+  rpc GetPartnerData(PartnerDataRequest) returns (PartnerDataResponse);
+}
+
+message PartnerDataRequest {
+  string partner_id = 1;
+  string data_type = 2;
+}
+
+message PartnerDataResponse {
+  bool success = 1;
+  string message = 2;
+  repeated PartnerInfo partners = 3;
+  string flag = 4;  // CTF flag for completing this challenge
+}
+
+message PartnerInfo {
+  string partner_id = 1;
+  string name = 2;
+  string api_key = 3;
+  string secret = 4;
+  repeated string permissions = 5;
+}

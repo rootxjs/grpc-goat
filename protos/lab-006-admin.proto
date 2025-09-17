@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package admin;
+
+option go_package = "grpc-goat/labs/grpc-006-pipe-world-read-write/server/proto";
+
+// AdminService provides privileged system operations
+service AdminService {
+  // GetSystemInfo returns sensitive system information
+  rpc GetSystemInfo(SystemInfoRequest) returns (SystemInfoResponse);
+  
+  // ExecuteCommand runs system commands (admin only)
+  rpc ExecuteCommand(CommandRequest) returns (CommandResponse);
+}
+
+message SystemInfoRequest {
+  // Empty request
+}
+
+message SystemInfoResponse {
+  bool success = 1;
+  string hostname = 2;
+  string username = 3;
+  string working_directory = 4;
+  repeated string environment_vars = 5;
+}
+
+message CommandRequest {
+  string command = 1;
+  repeated string args = 2;
+}
+
+message CommandResponse {
+  bool success = 1;
+  string output = 2;
+  string error = 3;
+  int32 exit_code = 4;
+}

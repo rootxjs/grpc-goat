@@ -48,6 +48,19 @@ The documentation includes:
 - Docker and Docker Compose
 - grpcurl: `go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest`
 
+## Proto Files
+
+For labs 002-009, you'll need the corresponding `.proto` files to interact with the services. All proto files are available in the `protos/` directory:
+
+```bash
+# Example: Test Lab 002 with grpcurl
+grpcurl -plaintext -proto protos/lab-002-auth.proto \
+  -d '{"username": "admin", "password": "password"}' \
+  localhost:8002 auth.AuthService/Login
+```
+
+See `protos/README.md` for detailed usage instructions.
+
 ## Contributing
 
 Contributions are welcome! Please see the documentation website for contribution guidelines.
