@@ -21,7 +21,7 @@ docker compose up --build
 
 For complete documentation, installation guides, and step-by-step walkthroughs, visit:
 
-**📖 [https://rootxjs.github.io/grpc-goat/](https://rootxjs.github.io/grpc-goat/)**
+**📖 [https://rootxjs.github.io/docs/grpc_goat_docs/getting-started/](https://rootxjs.github.io/docs/grpc_goat_docs/getting-started/)**
 
 The documentation includes:
 - **gRPC Basics** - Essential concepts and security fundamentals
