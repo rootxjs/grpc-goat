@@ -1,75 +1,57 @@
-# gRPC-goat
+# gRPC Goat
+
 gRPC Goat is a "Vulnerable by Design" lab created to provide an interactive, hands-on playground for learning and practicing gRPC security.
 
 Each lab contains a **CTF-style flag** that you can capture by successfully exploiting the vulnerability!
 
 ## Quick Start
 
-### Run All Labs
 ```bash
-# Start all vulnerable services (use Docker Compose V2)
+# Clone the repository
+git clone https://github.com/rootxjs/grpc-goat.git
+cd grpc-goat
+
+# Start all vulnerable services
 docker compose up --build
 
-# If you get permission errors, try:
-sudo docker compose up --build
-
-# Or add your user to docker group:
-sudo usermod -aG docker $USER
-# Then logout and login again
-
-# Services will be available on:
-# - Lab 001 (Reflection): localhost:8001
-# - Lab 002 (Plaintext): localhost:8002
-# - Lab 003 (Insecure TLS): localhost:8003
-# - Lab 004 (Arbitrary mTLS): localhost:8004
-# - Lab 005 (mTLS Subject): localhost:8005
-# - Lab 006 (Unix Socket): grpc-006 container
-# - Lab 007 (SQL Injection): localhost:8007
-# - Lab 008 (Command Injection): localhost:8008
-# - Lab 009 (SSRF): localhost:8009
+# Services will be available on localhost:8001-8009
 ```
 
-### Run Individual Labs
-```bash
-# Lab 001: gRPC Reflection
-cd labs/grpc-001-reflection-enabled
-docker build -t grpc-001 .
-docker run -p 8001:8001 grpc-001
+## Documentation
 
-# Lab 002: Plaintext gRPC
-cd labs/grpc-002-plaintext-grpc
-docker build -t grpc-002 .
-docker run -p 8002:8002 grpc-002
+For complete documentation, installation guides, and step-by-step walkthroughs, visit:
 
-# Lab 003: Insecure TLS
-cd labs/grpc-003-insecure-tls
-docker build -t grpc-003 .
-docker run -p 8003:8003 grpc-003
+**📖 [https://rootxjs.github.io/grpc-goat/](https://rootxjs.github.io/grpc-goat/)**
 
-# Lab 004: Arbitrary mTLS
-cd labs/grpc-004-arbitary-mtls
-docker build -t grpc-004 .
-docker run -p 8004:8004 grpc-004
-
-# Lab 005: mTLS with Subject Validation
-cd labs/grpc-005-arbitary-mtls-withsubject
-docker build -t grpc-005 .
-docker run -p 8005:8005 grpc-005
-
-# Lab 006: Unix Socket World Writable
-cd labs/grpc-006-pipe-world-read-write
-docker build -t grpc-006 .
-docker run -it --rm grpc-006 sh
-
-# Lab 007: SQL Injection
-cd labs/grpc-007-sql-injection
-docker build -t grpc-007 .
-docker run -p 8007:8007 grpc-007
-```
+The documentation includes:
+- **gRPC Basics** - Essential concepts and security fundamentals
+- **Labs Overview** - All 9 vulnerability scenarios with learning paths
+- **Installation Guide** - Detailed setup instructions and troubleshooting
+- **Walkthrough** - Step-by-step exploitation guides with code examples
 
 ## Labs Overview
-See [Labs.md](Labs.md) for detailed vulnerability descriptions.
+
+| Lab | Vulnerability | Port |
+|-----|---------------|------|
+| 001 | gRPC Reflection Enabled | 8001 |
+| 002 | Plaintext gRPC | 8002 |
+| 003 | Insecure TLS | 8003 |
+| 004 | Arbitrary mTLS | 8004 |
+| 005 | mTLS Subject Validation | 8005 |
+| 006 | Unix Socket World Writable | container |
+| 007 | SQL Injection | 8007 |
+| 008 | Command Injection | 8008 |
+| 009 | Server-Side Request Forgery | 8009 |
 
 ## Prerequisites
+
 - Docker and Docker Compose
-- grpcurl for testing: `go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest`
+- grpcurl: `go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest`
+
+## Contributing
+
+Contributions are welcome! Please see the documentation website for contribution guidelines.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

@@ -1,0 +1,239 @@
+---
+title: 'gRPC Basics'
+description: 'Essential gRPC concepts, security fundamentals, and learning resources'
+order: 1
+---
+
+import { Aside } from 'astro-pure/user'
+
+# gRPC Basics
+
+This guide covers the fundamental concepts of gRPC that you need to understand before diving into the security labs. Whether you're new to gRPC or need a refresher, this section will provide the foundation for understanding the vulnerabilities demonstrated in gRPC Goat.
+
+## What is gRPC?
+
+gRPC (gRPC Remote Procedure Calls) is a modern, open-source, high-performance RPC framework developed by Google. It uses HTTP/2 for transport, Protocol Buffers as the interface description language, and provides features like authentication, bidirectional streaming, flow control, blocking or nonblocking bindings, and cancellation and timeouts.
+
+### Key Advantages
+
+- **High Performance**: Built on HTTP/2 with binary serialization
+- **Language Agnostic**: Supports multiple programming languages
+- **Streaming Support**: Bidirectional streaming capabilities
+- **Strong Typing**: Protocol Buffers provide type safety
+- **Built-in Security**: Native TLS support and authentication mechanisms
+
+## Core Concepts
+
+### Protocol Buffers (protobuf)
+
+Protocol Buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. They define service contracts and message formats, and generate client and server code in multiple languages.
+
+**Example Service Definition:**
+```protobuf
+syntax = "proto3";
+
+package userservice;
+
+service UserService {
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  rpc ListUsers(ListUsersRequest) returns (stream User);
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+}
+
+message GetUserRequest {
+  string user_id = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  repeated string roles = 4;
+}
+```
+
+### Communication Patterns
+
+gRPC supports four types of service methods:
+
+**Unary RPC**
+- Single request, single response
+- Most common pattern, similar to HTTP REST calls
+```protobuf
+rpc GetUser(GetUserRequest) returns (GetUserResponse);
+```
+
+**Server Streaming**
+- Single request, stream of responses
+- Useful for real-time data feeds
+```protobuf
+rpc ListUsers(ListUsersRequest) returns (stream User);
+```
+
+**Client Streaming**
+- Stream of requests, single response
+- Useful for uploading data or batch operations
+```protobuf
+rpc CreateUsers(stream CreateUserRequest) returns (CreateUsersResponse);
+```
+
+**Bidirectional Streaming**
+- Stream of requests and responses
+- Enables real-time communication
+```protobuf
+rpc ChatStream(stream ChatMessage) returns (stream ChatMessage);
+```
+
+## Security Fundamentals
+
+Understanding gRPC security is crucial for both attacking and defending gRPC services. Here are the key security concepts:
+
+### Transport Security
+
+**TLS/SSL Encryption**
+- Encrypts data in transit between client and server
+- Prevents eavesdropping and tampering
+- Should always be enabled in production
+
+**Mutual TLS (mTLS)**
+- Both client and server authenticate each other using certificates
+- Provides strong authentication for service-to-service communication
+- Requires proper certificate management
+
+### Authentication Methods
+
+**Token-based Authentication**
+- JWT (JSON Web Tokens)
+- OAuth2 access tokens
+- API keys in metadata
+
+**Certificate-based Authentication**
+- Client certificates for mTLS
+- Certificate validation and trust chains
+- Certificate revocation handling
+
+### Authorization
+
+**Role-based Access Control (RBAC)**
+- Define roles and permissions
+- Validate user roles before processing requests
+- Implement fine-grained access controls
+
+**Method-level Authorization**
+- Different permissions for different gRPC methods
+- Context-aware authorization decisions
+- Audit logging for access attempts
+
+## Common Security Vulnerabilities
+
+The gRPC Goat labs demonstrate these common security issues:
+
+### Configuration Issues
+- **gRPC Reflection Enabled**: Exposes service definitions in production
+- **Insecure TLS**: Self-signed certificates or weak configurations
+- **Improper mTLS**: Accepting any client certificate
+
+### Authentication Bypasses
+- **Plaintext Communications**: No encryption for sensitive data
+- **Weak Certificate Validation**: Insufficient certificate checks
+- **Missing Authentication**: Unprotected admin endpoints
+
+### Input Validation Failures
+- **SQL Injection**: Unsanitized database queries
+- **Command Injection**: Unsafe system command execution
+- **SSRF**: Unvalidated URL requests
+
+### Infrastructure Misconfigurations
+- **Unix Socket Permissions**: World-writable sockets
+- **Network Exposure**: Services accessible from unintended networks
+
+## Testing Tools
+
+### Command Line Tools
+
+**grpcurl**
+- Command-line tool for interacting with gRPC services
+- Supports reflection, metadata, and various authentication methods
+```bash
+# List services
+grpcurl -plaintext localhost:8080 list
+
+# Call a method
+grpcurl -plaintext -d '{"name": "John"}' localhost:8080 userservice.UserService/GetUser
+```
+
+**ghz**
+- gRPC benchmarking and load testing tool
+- Useful for performance testing and stress testing
+```bash
+# Load test a service
+ghz --insecure --proto user.proto --call userservice.UserService.GetUser \
+    -d '{"user_id": "123"}' localhost:8080
+```
+
+**evans**
+- Interactive gRPC client with REPL interface
+- Great for exploring services and testing during development
+```bash
+# Start interactive session
+evans --host localhost --port 8080 --reflection
+```
+
+### GUI Applications
+
+**Postman**
+- Popular API client with gRPC support (v8.5.0+)
+- Visual interface for building and testing requests
+- Collection management and team collaboration
+
+**BloomRPC**
+- Cross-platform gRPC client with GUI interface
+- Simple and intuitive interface for gRPC testing
+- Supports reflection and custom metadata
+
+**Kreya**
+- Modern gRPC and REST API client
+- Advanced features for API testing and debugging
+- Environment management and scripting support
+
+**Insomnia**
+- API client with gRPC support
+- Plugin ecosystem and team features
+- GraphQL and REST support alongside gRPC
+
+## Learning Resources
+
+### Official Documentation
+- [gRPC Official Website](https://grpc.io/)
+- [gRPC Documentation](https://grpc.io/docs/)
+- [Protocol Buffers Guide](https://developers.google.com/protocol-buffers)
+- [gRPC Security Guide](https://grpc.io/docs/guides/security/)
+
+### Security Resources
+- [gRPC Authentication](https://grpc.io/docs/guides/auth/)
+- [OWASP API Security Top 10](https://owasp.org/www-project-api-security/)
+- [gRPC Security Best Practices](https://grpc.io/docs/guides/security/)
+
+### Language-Specific Guides
+- [gRPC Go Tutorial](https://grpc.io/docs/languages/go/quickstart/)
+- [gRPC Python Tutorial](https://grpc.io/docs/languages/python/quickstart/)
+- [gRPC Java Tutorial](https://grpc.io/docs/languages/java/quickstart/)
+- [gRPC Node.js Tutorial](https://grpc.io/docs/languages/node/quickstart/)
+- [gRPC C# Tutorial](https://grpc.io/docs/languages/csharp/quickstart/)
+
+### Community Resources
+- [gRPC GitHub Repository](https://github.com/grpc/grpc)
+- [gRPC Community](https://grpc.io/community/)
+- [Awesome gRPC](https://github.com/grpc-ecosystem/awesome-grpc)
+
+<Aside type="note">
+**Next Steps**: Now that you understand the basics of gRPC, you're ready to explore the vulnerability labs. Each lab will demonstrate how these concepts can be exploited when not properly implemented.
+</Aside>
+
+Ready to start learning about gRPC security? Head to the [Labs Overview](/docs/grpc_goat_docs/labs) to see all available vulnerability scenarios!

@@ -1,0 +1,84 @@
+---
+title: 'Labs Overview'
+description: 'Comprehensive gRPC security vulnerabilities and attack scenarios'
+order: 2
+---
+
+import { Aside } from 'astro-pure/user'
+
+# gRPC Goat Labs
+
+Welcome to the gRPC Goat vulnerability labs! Each lab demonstrates a specific security vulnerability commonly found in real-world gRPC applications. These hands-on exercises will help you understand both how to exploit these vulnerabilities and how to defend against them.
+
+<Aside type="tip">
+**Getting Started**: Each lab is designed to be completed independently. Start with Lab 001 for beginners or jump to any specific vulnerability you want to explore.
+</Aside>
+
+## Vulnerability Overview
+
+The following table provides an overview of all available labs, their business context, and the security risks they demonstrate:
+
+| Lab | Service Name | Business Purpose | Vulnerability | Risk / Impact |
+|-----|--------------|------------------|---------------|---------------|
+| **001** | **Service Discovery** | Internal API registry for developers | **Reflection Enabled** | Attackers can enumerate all gRPC services and hidden methods, discovering sensitive endpoints like admin functions |
+| **002** | **Auth Service** | Handles user login and session tokens | **Plaintext gRPC** | Credentials sent over plaintext can be intercepted and reused by attackers |
+| **003** | **Billing Service** | Processes customer payments | **Insecure TLS** | Self-signed TLS allows MITM attacks and interception/manipulation of transactions |
+| **004** | **Partner API** | Exposes partner integrations | **Arbitrary mTLS** | Accepts any client certificate, letting attackers impersonate trusted partners and access restricted APIs |
+| **005** | **Partner API v2** | Enhanced partner integrations | **mTLS Subject Validation** | Validates subject name but accepts self-signed certificates, allowing certificate impersonation |
+| **006** | **Admin Service** | System administration functions | **Unix Socket World Writable** | Socket with world read/write permissions allows any user to access admin functions |
+| **007** | **User Directory** | Stores employee profiles and permissions | **SQL Injection** | Unsanitized database queries allow attackers to exfiltrate sensitive data (users, credentials, API keys) |
+| **008** | **File Processor** | Processes uploaded files for reports | **Command Injection** | Unsanitized input allows attackers to execute arbitrary system commands on the server |
+| **009** | **Image Preview** | Fetches thumbnails from external URLs | **SSRF** | Attackers can make the server request internal resources, potentially accessing metadata or internal endpoints |
+
+## Lab Categories
+
+### Discovery & Enumeration
+- **Lab 001**: Service Discovery - Learn how gRPC reflection can expose your entire API surface
+
+### Authentication & Authorization
+- **Lab 002**: Auth Service - Understand the risks of plaintext gRPC communications
+- **Lab 004**: Partner API - Explore mTLS misconfigurations
+- **Lab 005**: Partner API v2 - Advanced certificate validation bypasses
+
+### Transport Security
+- **Lab 003**: Billing Service - TLS implementation vulnerabilities
+- **Lab 006**: Admin Service - Unix socket permission issues
+
+### Injection Attacks
+- **Lab 007**: User Directory - SQL injection in gRPC services
+- **Lab 008**: File Processor - Command injection vulnerabilities
+- **Lab 009**: Image Preview - Server-Side Request Forgery (SSRF)
+
+<Aside type="caution">
+**Security Notice**: These labs contain intentionally vulnerable code for educational purposes. Never deploy this code in production environments.
+</Aside>
+
+## Learning Path
+
+### For Beginners
+Start with these foundational labs to understand basic gRPC security concepts:
+1. **Lab 001** - gRPC Reflection (easiest to understand and exploit)
+2. **Lab 002** - Plaintext Communications (demonstrates basic transport security)
+3. **Lab 007** - SQL Injection (familiar vulnerability in gRPC context)
+
+### For Intermediate Users
+Explore authentication and transport security issues:
+1. **Lab 003** - Insecure TLS Implementation
+2. **Lab 004** - mTLS Misconfigurations
+3. **Lab 006** - Unix Socket Permissions
+
+### For Advanced Users
+Tackle complex vulnerabilities and advanced attack scenarios:
+1. **Lab 005** - Advanced Certificate Validation Bypasses
+2. **Lab 008** - Command Injection in gRPC Services
+3. **Lab 009** - Server-Side Request Forgery (SSRF)
+
+## Getting Started
+
+1. **Choose a lab** from the table above based on your experience level
+2. **Set up the environment** following the [installation guide](/docs/grpc_goat_docs/getting-started)
+3. **Follow the lab instructions** to exploit the vulnerability
+4. **Study the mitigation** techniques to secure your own gRPC services
+5. **Practice with different tools** like Postman, grpcurl, or BloomRPC
+
+Ready to start? Head to [Getting Started](/docs/grpc_goat_docs/getting-started) to set up your lab environment!
