@@ -14,6 +14,8 @@ This guide provides step-by-step instructions for exploiting each vulnerability 
 **Prerequisites**: Make sure you have completed the [Getting Started](/docs/grpc_goat_docs/getting-started) guide and have `grpcurl` installed.
 </Aside>
 
+![alt text](grpc_goat_comp.webp)
+
 ## Lab 001: gRPC Reflection Enabled
 
 **Vulnerability**: Service Discovery API exposes hidden admin methods through gRPC reflection.
@@ -102,6 +104,18 @@ func (s *authServer) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Login
 s := grpc.NewServer(grpc.UnaryInterceptor(unaryInterceptor))
 ```
 
+### Lab Objective
+To solve this lab, you simply connect to the plaintext gRPC service and call the authentication method with valid credentials. However, examining the service reveals additional security concerns:
+
+**Immediate Issue (Lab Focus)**:
+- Service accepts plaintext connections without requiring TLS
+- Credentials are logged in server logs
+
+**Broader Security Implications**:
+- **Network Traffic Exposure**: In a real environment, credentials would be visible to anyone monitoring network traffic
+- **Man-in-the-Middle Attacks**: Attackers could intercept and modify communications
+- **Credential Harvesting**: Network-level attackers could collect authentication data
+
 ### What to Look For
 - No TLS encryption on gRPC connections
 - Credentials transmitted in plaintext
@@ -175,6 +189,16 @@ tlsConfig := &tls.Config{
 }
 ```
 
+### Lab Objective
+To solve this lab, you bypass certificate validation using the `-insecure` flag to connect to a service with a self-signed certificate. However, this reveals deeper security issues:
+
+**Immediate Issue (Lab Focus)**:
+- Service uses self-signed certificates that clients must bypass
+- Sensitive payment data is logged in plaintext
+
+**Broader Security Implications**:
+- **Trust Establishment**: Clients cannot verify server identity, enabling impersonation attacks
+
 ### What to Look For
 - Self-signed TLS certificates
 - Certificate validation bypasses required
@@ -246,6 +270,18 @@ tlsConfig := &tls.Config{
     ClientAuth: tls.RequireAnyClientCert, // Accepts any certificate!
 }
 ```
+
+### Lab Objective
+To solve this lab, you generate a self-signed client certificate and use it to access partner data. This demonstrates how improper mTLS configuration can be exploited:
+
+**Immediate Issue (Lab Focus)**:
+- mTLS configuration accepts any client certificate without validation
+- No verification against a trusted Certificate Authority
+
+**Broader Security Implications**:
+- **Partner Impersonation**: Any attacker can create certificates and pose as legitimate partners
+- **Data Breach**: Sensitive partner API keys and secrets are exposed to unauthorized clients
+- **Trust Model Failure**: The entire purpose of mTLS (mutual authentication) is defeated
 
 ### What to Look For
 - mTLS configuration that accepts any certificate
@@ -326,6 +362,18 @@ tlsConfig := &tls.Config{
     ClientAuth: tls.RequireAnyClientCert, // No CA validation!
 }
 ```
+
+### Lab Objective
+To solve this lab, you create a self-signed certificate with the correct subject name (`goatpartner.local`) to bypass the subject validation. This demonstrates a common mTLS misconfiguration:
+
+**Immediate Issue (Lab Focus)**:
+- Service validates certificate subject but not the certificate authority
+- Self-signed certificates with correct subjects are accepted
+
+**Broader Security Implications**:
+- **Partner Impersonation**: Attackers can create certificates with legitimate subjects and pose as trusted partners
+- **Data Breach**: Sensitive partner data is exposed to unauthorized clients with forged certificates
+- **Trust Model Failure**: Subject validation alone is insufficient without proper CA verification
 
 ### What to Look For
 - Subject name validation in mTLS
@@ -739,6 +787,15 @@ func isInternalIP(hostname string) bool {
 ---
 
 ## Security Lessons Learned
+
+### Understanding Lab vs. Real-World Vulnerabilities
+
+**Important Note**: The labs focus on demonstrating specific gRPC vulnerabilities through direct exploitation techniques. However, many of the underlying security issues have broader implications in real-world scenarios:
+
+- **Lab Approach**: Direct connection and exploitation to demonstrate the core vulnerability
+- **Real-World Impact**: These same vulnerabilities enable more sophisticated attacks like network interception, MITM attacks, and other advanced techniques
+
+For example, while Lab 002 shows direct plaintext connection, the real security risk is that credentials would be visible to network monitoring tools, packet sniffers, or man-in-the-middle attackers in production environments.
 
 ### Key Takeaways
 
